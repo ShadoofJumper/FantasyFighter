@@ -30,6 +30,8 @@ public class SceneController : MonoBehaviour
     private float rotateTime = 0.5f;
     private bool isRotate   = false;
 
+    public GameObject Player => player;
+
 
     void Start()
     {

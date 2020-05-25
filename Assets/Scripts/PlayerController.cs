@@ -45,13 +45,13 @@ public class PlayerController : MonoBehaviour
         rawMoveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         moveVelocity = CalculateMMoveVelocity(rawMoveInput);
 
-        isMove          = rawMoveInput.magnitude != 0 ? true : false;
-        isAttack        = Input.GetMouseButton(0) && !isMove;
+        isMove      = rawMoveInput.magnitude != 0 ? true : false;
+        isAttack    = Input.GetMouseButton(0) && !isMove;
     }
 
     private Vector3 CalculateMMoveVelocity(Vector3 input)
     {
-        Vector3 globalForward   = Camera.main.transform.forward;
+        Vector3 globalForward   = transform.forward;
         Vector3 globalRight     = Quaternion.Euler(0, 90, 0) * globalForward;
 
         Vector3 verticalMovement    = globalForward * input.z;
