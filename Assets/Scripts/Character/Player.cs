@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player : Character
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private int health;
-    [SerializeField] private int attackDamage;
-
-    private Rigidbody   playerRigidbody;
-    private Animator    playerAnimator;
-
     private Vector3 moveVelocity;
     private bool    isAttack;
     private bool    isMove;
     private Vector3 rawMoveInput;
 
+    public bool IsAttack => isAttack;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerRigidbody = GetComponent<Rigidbody>();
-        playerAnimator  = GetComponentInChildren<Animator>();
+        SetUpCharacterComp();
     }
 
     // Update is called once per frame
@@ -30,13 +23,13 @@ public class PlayerController : MonoBehaviour
         GetInput();
         UpdateAnimation();
         UpdateLookSide();
+        Combat();
     }
 
 
     private void FixedUpdate()
     {
         MovePlayer();
-        Combat();
     }
 
     // --------------------- Movement logic ---------------------
@@ -46,7 +39,7 @@ public class PlayerController : MonoBehaviour
         moveVelocity = CalculateMMoveVelocity(rawMoveInput);
 
         isMove      = rawMoveInput.magnitude != 0 ? true : false;
-        isAttack    = Input.GetMouseButton(0) && !isMove;
+        isAttack    = Input.GetMouseButtonDown(0) && !isMove;
     }
 
     private Vector3 CalculateMMoveVelocity(Vector3 input)
@@ -61,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        playerRigidbody.velocity = moveVelocity * moveSpeed;
+        characterRigidbody.velocity = moveVelocity * moveSpeed;
     }
 
     // --------------------- Combat logic -----------------------
@@ -70,7 +63,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttack)
         {
-            //Debug.Log("ATTACK!");
+            characterCombat.Fight();
         }
     }
 
@@ -80,11 +73,10 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimation()
     {
         float actualMoveSpeed = moveVelocity.magnitude;
-        playerAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
+        characterAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
         if (isAttack)
         {
-            //Debug.Log("Update attack anim!");
-            playerAnimator.SetTrigger("MainAttack");
+            characterAnimator.SetTrigger("MainAttack");
         }
     }
 

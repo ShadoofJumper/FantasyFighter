@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class Enemy : Character
 {
-    [SerializeField] private int health;
-    [SerializeField] private float damage;
-    [SerializeField] private float moveSpeed;
     [SerializeField] private float attackRange;
 
     private NavMeshAgent agent;
@@ -15,19 +12,19 @@ public class EnemyController : MonoBehaviour
     private bool isAttack = false;
     private Transform target;
 
-    private Animator enemyAnimator;
-    private Rigidbody enemyRigidbody;
 
     void Start()
     {
-        agent           = GetComponent<NavMeshAgent>();
-        enemyRigidbody  = GetComponent<Rigidbody>();
-        enemyAnimator   = GetComponentInChildren<Animator>();
-
-        target  = SceneController.instance.Player.transform;
-
-        agent.speed = moveSpeed;
+        SetUpCharacterComp();
+        target          = SceneController.instance.Player.transform;
+        agent.speed     = moveSpeed;
         agent.stoppingDistance = attackRange;
+    }
+
+    protected override void SetUpCharacterComp()
+    {
+        base.SetUpCharacterComp();
+        agent = GetComponent<NavMeshAgent>();
     }
 
 
@@ -68,9 +65,9 @@ public class EnemyController : MonoBehaviour
     private void UpdateAnimation()
     {
         float actualMoveSpeed = agent.velocity.magnitude;
-        Debug.Log("UpdateAnimation: " + actualMoveSpeed);
+        //Debug.Log("UpdateAnimation: " + actualMoveSpeed);
 
-        enemyAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
+        characterAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
         if (isAttack)
         {
             //enemyAnimator.SetTrigger("MainAttack");
@@ -79,16 +76,21 @@ public class EnemyController : MonoBehaviour
 
     private void UpdateLookSide()
     {
-        //if (rawMoveInput.x != 0)
-            //transform.localScale = new Vector3(rawMoveInput.x, 1, 1);
+        Vector3 dir = transform.position - target.position;
+        float side  = Helpers.AngleDir(Vector3.forward, dir, Vector3.up) * -1;
+
+        if (side != 0)
+            transform.localScale = new Vector3(side, 1, 1);
     }
 
 
     // -------------- Combat logic --------------
     private void Attack()
     {
-        Debug.Log("Attack!");
+        //Debug.Log("Attack!");
         isAttack = true;
+        characterAnimator.SetTrigger("MainAttack");
+        characterCombat.Fight();
     }
 
     // --------------- Dev ---------------
