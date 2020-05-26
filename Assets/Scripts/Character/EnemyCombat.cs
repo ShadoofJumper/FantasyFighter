@@ -18,16 +18,28 @@ public class EnemyCombat : CharacterCombat
         playerCombat = SceneController.instance.Player.GetComponent<CharacterCombat>();
     }
 
-    public override void Attack(UnityAction delayFunk)
+    public override void Fight(UnityAction delayFunk = null)
     {
-        Debug.Log("BOOM!");
-        StartCoroutine(DoDamage(delayFunk));
+        if (!SceneController.instance.Player.GetComponent<Character>().IsDead)
+        {
+            base.Fight(delayFunk);
+        }
     }
 
-    IEnumerator DoDamage(UnityAction delayFunk)
+    public override void TakeDamage(int damageTake)
+    {
+        character.IsPause = true;
+        base.TakeDamage(damageTake);
+    }
+
+    public override void Attack()
+    {
+        StartCoroutine(DoDamage());
+    }
+
+    IEnumerator DoDamage()
     {
         yield return new WaitForSeconds(attackDelay);
-        if(delayFunk!=null) delayFunk.Invoke();
         playerCombat.TakeDamage(damage);
     }
 

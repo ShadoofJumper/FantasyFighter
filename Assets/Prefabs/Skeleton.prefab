@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1146800411626968644}
   - component: {fileID: 1146800411626968647}
   - component: {fileID: 1146800411626968646}
+  - component: {fileID: 1635239815}
   m_Layer: 0
   m_Name: EnemySprite
   m_TagString: Untagged
@@ -133,6 +134,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1635239815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146800411626968645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2de8112b45283d548afa974fd849446f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1146800411659794681
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
+  deathSprite: {fileID: 9127252425632694130, guid: f0732d9d9a2654e429ed5ec506c34289,
+    type: 3}
+  characterSpriteObject: {fileID: 1146800411626968645}
   attackRange: 0.6
 --- !u!54 &1146800411659794680
 Rigidbody:

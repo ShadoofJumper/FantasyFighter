@@ -21,18 +21,25 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            moveVelocity = Vector3.zero;
+            //call last time for stop
+            return;
+        }
+
         GetInput();
         UpdateAnimation();
         UpdateLookSide();
         Combat();
-
-        if (isAttack)
-            Debug.Log("check attack");
     }
 
 
     private void FixedUpdate()
     {
+        if (isDead)
+            return;
+
         MovePlayer();
     }
 
@@ -68,6 +75,7 @@ public class Player : Character
 
     private void MovePlayer()
     {
+        Debug.Log("Move player");
         characterRigidbody.velocity = moveVelocity * moveSpeed;
     }
 
@@ -79,7 +87,6 @@ public class Player : Character
         {
             characterCombat.Fight(delegate {
                 isAttack = false;
-                Debug.Log("End attack");
             });
         }
     }

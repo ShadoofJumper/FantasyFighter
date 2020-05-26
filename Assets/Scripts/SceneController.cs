@@ -23,12 +23,20 @@ public class SceneController : MonoBehaviour
     #endregion
 
     [SerializeField] private GameObject player;
+    [SerializeField] private Transform emptyBodyFolder;
     [SerializeField] private AnimationCurve rotateCurve;
+
+    //prefabs
+    [SerializeField] private GameObject emptyBody;
+    [SerializeField] private GameObject skeletonPrefab;
+    [SerializeField] private GameObject potionPrefab;
+
 
     private GameObject[] billboardSprites;
     private float rotateStep = 90;
     private float rotateTime = 0.5f;
     private bool isRotate   = false;
+    private List<GameObject> deathBodys = new List<GameObject>();
 
     public GameObject Player => player;
 
@@ -38,12 +46,24 @@ public class SceneController : MonoBehaviour
         ActivateBillboardsEffect();
     }
 
-
     private void Update()
     {
         RotateWorld();
     }
 
+    // -------------------- Spawn logic ---------------------
+
+    public void CreateDeathBody(Sprite deathSprite, Vector3 diePos, float xScale)
+    {
+        GameObject enemyBody = Instantiate(emptyBody, diePos, Quaternion.identity, emptyBodyFolder);
+        enemyBody.name = "deadBody_"+deathBodys.Count;
+        enemyBody.GetComponent<SpriteRenderer>().sprite = deathSprite;
+        enemyBody.AddComponent<Billboards>();
+        enemyBody.transform.localScale = new Vector3(xScale,1,1);
+        deathBodys.Add(enemyBody);
+    }
+
+    // -------------------- Rotate logic --------------------
     private void RotateWorld()
     {
 
@@ -98,4 +118,6 @@ public class SceneController : MonoBehaviour
             spriteObject.AddComponent<Billboards>();
         }
     }
+
+    // ------------------------------------------------------------ 
 }

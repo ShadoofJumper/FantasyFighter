@@ -9,44 +9,68 @@ public class CharacterCombat : MonoBehaviour
     [SerializeField] protected int damage;
     [SerializeField] protected float attackRate;
     [SerializeField] protected float attackDelay;
-    private float timeToFire;
+    protected float timeToFire;
+    protected AnimationEvents characterAnimationEvents;
     protected Animator characterAnimator;
+    protected Character character;
+
 
     public int Health => health;
     public int Damage => damage;
 
     protected virtual void SetUpCombatComp()
     {
-        characterAnimator   = GetComponentInChildren<Animator>();
+        characterAnimator           = GetComponentInChildren<Animator>();
+        characterAnimationEvents    = GetComponentInChildren<AnimationEvents>();
+        character = GetComponent<Character>();
+
+        characterAnimationEvents.onDie = AfterDeath;
+        characterAnimationEvents.onHit = AfterHit;
+
     }
 
-    public void TakeDamage(int damageTake)
+    public void HealthCharacter(int healthAmound)
+    {
+        health += healthAmound;
+    }
+
+    public virtual void TakeDamage(int damageTake)
     {
         characterAnimator.SetTrigger("Hit");
-
         health -= damageTake;
         if (health <= 0)
             Die();
     }
 
-    public void Die()
+    public virtual void Die()
     {
+        character.IsDead = true;
+        characterAnimator.SetTrigger("Die");
+    }
+
+    protected virtual void AfterDeath()
+    {
+        SceneController.instance.CreateDeathBody(character.DeathSprite, character.CharacterSpriteObject.transform.position, gameObject.transform.localScale.x);
         Destroy(gameObject);
+    }
+
+    private void AfterHit()
+    {
+        character.IsPause = false;
     }
 
     public virtual void Fight(UnityAction delayFunk = null)
     {
-        // check if time to shoot
+        characterAnimationEvents.onMainAttackEnd = delayFunk;
         if (Time.time >= timeToFire)
         {
             timeToFire = Time.time + 1 / attackRate;
-            //characterAnimator.ResetTrigger("MainAttack");
             characterAnimator.SetTrigger("MainAttack");
-            Attack(delayFunk);
+            Attack();
         }
     }
 
-    public virtual void Attack(UnityAction delayFunk)
+    public virtual void Attack()
     {
 
     }

@@ -21,7 +21,7 @@ public class PlayerCombat : CharacterCombat
     protected override void SetUpCombatComp()
     {
         base.SetUpCombatComp();
-        player = GetComponent<Player>();
+        player = character as Player;
     }
 
     private void Update()
@@ -39,18 +39,38 @@ public class PlayerCombat : CharacterCombat
         //
     }
 
-    public override void Attack(UnityAction delayFunk)
+    public override void Die()
     {
-        Debug.Log("Attack!");
-        StartCoroutine(DoDamage(delayFunk));
+        character.IsDead = true;
+        character.CharacterRigidbody.velocity = Vector3.zero;
+        StartCoroutine(DieAnimWithDelay());
     }
 
-    IEnumerator DoDamage(UnityAction delayFunk)
+    IEnumerator DieAnimWithDelay()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            yield return null;
+        }
+        characterAnimator.SetTrigger("Die");
+    }
+
+    protected override void AfterDeath()
+    {
+        gameObject.GetComponent<PlayerCombat>().enabled = false;
+    }
+
+    public override void Attack()
+    {
+        Debug.Log("Attack!");
+        StartCoroutine(DoDamage());
+    }
+
+    IEnumerator DoDamage()
     {
         yield return new WaitForSeconds(attackDelay);
         //if (player.IsMove)
         //    yield break;
-        if (delayFunk != null) delayFunk.Invoke();
 
         enemysHit = GetEnemysInRange();
         foreach (RaycastHit hit in enemysHit)

@@ -20,8 +20,8 @@ public class Enemy : Character
 
     void Start()
     {
-        target          = SceneController.instance.Player.transform;
-        agent.speed     = moveSpeed;
+        target = SceneController.instance.Player.transform;
+        agent.speed = moveSpeed;
         agent.stoppingDistance = attackRange;
     }
 
@@ -35,6 +35,13 @@ public class Enemy : Character
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (isDead || IsPause)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            return;
+        }
+
         // move character to player
         if (!IsNearTarget())
         {
@@ -48,6 +55,9 @@ public class Enemy : Character
 
     private void Update()
     {
+        if (isDead || IsPause)
+            return;
+
         UpdateAnimation();
         UpdateLookSide();
     }
@@ -62,7 +72,7 @@ public class Enemy : Character
 
     private void MoveToTarget()
     {
-        //agent.SetDestination(target.position);
+        agent.SetDestination(target.position);
     }
 
     // ------------- Animation logic --------------
@@ -70,12 +80,7 @@ public class Enemy : Character
     {
         float actualMoveSpeed = agent.velocity.magnitude;
         //Debug.Log("UpdateAnimation: " + actualMoveSpeed);
-
         characterAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
-        if (isAttack)
-        {
-            //enemyAnimator.SetTrigger("MainAttack");
-        }
     }
 
     private void UpdateLookSide()
@@ -96,7 +101,7 @@ public class Enemy : Character
     {
         //Debug.Log("Attack!");
         isAttack = true;
-        //characterCombat.Fight();
+        characterCombat.Fight();
     }
 
     // --------------- Dev ---------------
