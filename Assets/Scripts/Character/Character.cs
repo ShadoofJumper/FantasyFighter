@@ -9,6 +9,8 @@ public class Character : MonoBehaviour
     protected Rigidbody   characterRigidbody;
     protected Animator    characterAnimator;
     protected CharacterCombat characterCombat;
+    public Animator CharacterAnimator => characterAnimator;
+
 
     protected virtual void SetUpCharacterComp()
     {

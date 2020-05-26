@@ -1,37 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Player))]
 public class PlayerCombat : CharacterCombat
 {
     [SerializeField] private float hitRange;
+    [SerializeField] private float angleHit = 40;
+    private Player player;
     private RaycastHit[] enemysHit;
 
     void Start()
     {
+        SetUpCombatComp();
+
+    }
+
+    protected override void SetUpCombatComp()
+    {
+        base.SetUpCombatComp();
+        player = GetComponent<Player>();
     }
 
     private void Update()
     {
+        // for test
         Vector3 center = transform.position;
-        Vector3 dir = transform.right * transform.localScale.x;
+        Vector3 dir1 = transform.right * transform.localScale.x;
+        Vector3 dir2 = Quaternion.Euler(0, angleHit/2, 0) * dir1;
+        Vector3 dir3 = Quaternion.Euler(0, angleHit/2 * -1, 0) * dir1;
+
         center.y = 0.5f;
+        Debug.DrawLine(center, center + dir1, Color.red);
+        Debug.DrawLine(center, center + dir2, Color.red);
+        Debug.DrawLine(center, center + dir3, Color.red);
+        //
     }
 
-    public override void Attack()
+    public override void Attack(UnityAction delayFunk)
     {
-        StartCoroutine(DoDamage());
+        Debug.Log("Attack!");
+        StartCoroutine(DoDamage(delayFunk));
     }
 
-    IEnumerator DoDamage()
+    IEnumerator DoDamage(UnityAction delayFunk)
     {
         yield return new WaitForSeconds(attackDelay);
+        //if (player.IsMove)
+        //    yield break;
+        if (delayFunk != null) delayFunk.Invoke();
+
         enemysHit = GetEnemysInRange();
         foreach (RaycastHit hit in enemysHit)
         {
             CharacterCombat hitEnemy = hit.collider.gameObject.GetComponent<CharacterCombat>();
-            //Debug.Log("Hit: " + hitEnemy.gameObject.name);
             //Debug.Log($"Helth: {hitEnemy.Health}");
             if (hitEnemy != null)
             {
@@ -44,14 +68,18 @@ public class PlayerCombat : CharacterCombat
 
     private RaycastHit[] GetEnemysInRange()
     {
-        Vector3 origin = transform.position;
+        Vector3 origin  = transform.position;
         origin.y = 0.5f;
-        Vector3 dir = transform.right * transform.localScale.x;
+        Vector3 dir1 = transform.right * transform.localScale.x;
+        Vector3 dir2 = Quaternion.Euler(0,  angleHit / 2,        0) * dir1;
+        Vector3 dir3 = Quaternion.Euler(0,  angleHit / 2 * -1,   0) * dir1;
 
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(origin, dir, 100.0F);
+        RaycastHit[] hits = { };
+        var result  = hits.Union    (Physics.RaycastAll(origin, dir1, hitRange), new EnemyHitComparer());
+        result      = result.Union  (Physics.RaycastAll(origin, dir2, hitRange), new EnemyHitComparer());
+        result      = result.Union  (Physics.RaycastAll(origin, dir3, hitRange), new EnemyHitComparer());
 
-        return hits;
+        return result.ToArray();
     }
 
 
@@ -66,3 +94,5 @@ public class PlayerCombat : CharacterCombat
     }
 
 }
+
+

@@ -10,9 +10,10 @@ public class Player : Character
     private Vector3 rawMoveInput;
 
     public bool IsAttack => isAttack;
+    public bool IsMove => isMove;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         SetUpCharacterComp();
     }
@@ -24,6 +25,9 @@ public class Player : Character
         UpdateAnimation();
         UpdateLookSide();
         Combat();
+
+        if (isAttack)
+            Debug.Log("check attack");
     }
 
 
@@ -38,8 +42,18 @@ public class Player : Character
         rawMoveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         moveVelocity = CalculateMMoveVelocity(rawMoveInput);
 
-        isMove      = rawMoveInput.magnitude != 0 ? true : false;
-        isAttack    = Input.GetMouseButtonDown(0) && !isMove;
+        // always can attack
+        if(Input.GetMouseButtonDown(0))
+            isAttack = true;
+
+        //move if not attack
+        isMove = rawMoveInput.magnitude != 0 ? true : false;
+
+        if (isAttack)
+        {
+            isMove = false;
+            moveVelocity = Vector3.zero;
+        }
     }
 
     private Vector3 CalculateMMoveVelocity(Vector3 input)
@@ -63,7 +77,10 @@ public class Player : Character
     {
         if (isAttack)
         {
-            characterCombat.Fight();
+            characterCombat.Fight(delegate {
+                isAttack = false;
+                Debug.Log("End attack");
+            });
         }
     }
 
@@ -74,10 +91,6 @@ public class Player : Character
     {
         float actualMoveSpeed = moveVelocity.magnitude;
         characterAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
-        if (isAttack)
-        {
-            characterAnimator.SetTrigger("MainAttack");
-        }
     }
 
     private void UpdateLookSide()

@@ -23,3 +23,21 @@ public static class Helpers
         }
     }
 }
+
+public class EnemyHitComparer : IEqualityComparer<RaycastHit>
+{
+    public bool Equals(RaycastHit hit1, RaycastHit hit2)
+    {
+        //compare gameobjects name
+        if (hit1.collider.gameObject.name == hit2.collider.gameObject.name)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public int GetHashCode(RaycastHit obj)
+    {
+        return obj.collider.gameObject.name.GetHashCode();
+    }
+}

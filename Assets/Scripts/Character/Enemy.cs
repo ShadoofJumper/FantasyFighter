@@ -13,9 +13,13 @@ public class Enemy : Character
     private Transform target;
 
 
-    void Start()
+    private void Awake()
     {
         SetUpCharacterComp();
+    }
+
+    void Start()
+    {
         target          = SceneController.instance.Player.transform;
         agent.speed     = moveSpeed;
         agent.stoppingDistance = attackRange;
@@ -58,7 +62,7 @@ public class Enemy : Character
 
     private void MoveToTarget()
     {
-        agent.SetDestination(target.position);
+        //agent.SetDestination(target.position);
     }
 
     // ------------- Animation logic --------------
@@ -92,8 +96,7 @@ public class Enemy : Character
     {
         //Debug.Log("Attack!");
         isAttack = true;
-        characterAnimator.SetTrigger("MainAttack");
-        characterCombat.Fight();
+        //characterCombat.Fight();
     }
 
     // --------------- Dev ---------------
