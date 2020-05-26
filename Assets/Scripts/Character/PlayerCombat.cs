@@ -17,8 +17,6 @@ public class PlayerCombat : CharacterCombat
         Vector3 center = transform.position;
         Vector3 dir = transform.right * transform.localScale.x;
         center.y = 0.5f;
-        Debug.DrawLine(center, center + dir, Color.red);
-
     }
 
     public override void Attack()

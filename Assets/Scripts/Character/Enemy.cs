@@ -77,7 +77,10 @@ public class Enemy : Character
     private void UpdateLookSide()
     {
         Vector3 dir = transform.position - target.position;
-        float side  = Helpers.AngleDir(Vector3.forward, dir, Vector3.up) * -1;
+        float side  = Helpers.AngleDir(target.forward, dir, Vector3.up) * -1;
+
+        Debug.DrawLine(transform.position, transform.position + target.forward, Color.blue);
+        Debug.DrawLine(transform.position, transform.position + Vector3.up, Color.red);
 
         if (side != 0)
             transform.localScale = new Vector3(side, 1, 1);

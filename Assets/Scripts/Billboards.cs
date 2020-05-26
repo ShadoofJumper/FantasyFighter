@@ -9,5 +9,4 @@ public class Billboards : MonoBehaviour
     {
         transform.forward = Camera.main.transform.forward;
     }
-
 }
