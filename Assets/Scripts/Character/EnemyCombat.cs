@@ -32,6 +32,12 @@ public class EnemyCombat : CharacterCombat
         base.TakeDamage(damageTake);
     }
 
+    protected override void AfterDeath()
+    {
+        SceneController.instance.CreateDeathBody(character.DeathSprite, character.CharacterSpriteObject.transform.position, gameObject.transform.localScale.x);
+        SceneController.instance.OnEnemieDie(gameObject);
+    }
+
     public override void Attack()
     {
         StartCoroutine(DoDamage());

@@ -75,7 +75,6 @@ public class Player : Character
 
     private void MovePlayer()
     {
-        Debug.Log("Move player");
         characterRigidbody.velocity = moveVelocity * moveSpeed;
     }
 

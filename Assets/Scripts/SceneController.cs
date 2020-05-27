@@ -30,6 +30,17 @@ public class SceneController : MonoBehaviour
     [SerializeField] private GameObject emptyBody;
     [SerializeField] private GameObject skeletonPrefab;
     [SerializeField] private GameObject potionPrefab;
+    
+    //info for spawn manager
+    [SerializeField] private int startEnemyCount;
+    [SerializeField] private int enemyIncreaseStep;
+    [SerializeField] private List<Transform> enemySpawnPoints;
+    [SerializeField] private Transform enemiesFolder;
+    private Queue<GameObject> enemiesPool = new Queue<GameObject>();
+    private int enemyPoolCounter;
+    private int currentSpawnInWave;
+    private int waveNumber;
+    private int maxSpawnInWave;
 
 
     private GameObject[] billboardSprites;
@@ -44,14 +55,75 @@ public class SceneController : MonoBehaviour
     void Start()
     {
         ActivateBillboardsEffect();
+        StartSpawnManager();
     }
 
     private void Update()
     {
         RotateWorld();
+        Debug.Log($"Enemy coun: {currentSpawnInWave}/{startEnemyCount}");
     }
 
     // -------------------- Spawn logic ---------------------
+    private void StartSpawnManager()
+    {
+        // max enemies to spawn in current wave
+        maxSpawnInWave = startEnemyCount + enemyIncreaseStep * waveNumber;
+
+        foreach (Transform spawnPoint in enemySpawnPoints)
+        {
+            // start coroutine where enemies randomly spawn while need
+            StartCoroutine(SpawnOnPoint(spawnPoint));
+        }
+    }
+
+    IEnumerator SpawnOnPoint(Transform spawnPoint)
+    {
+        // if need spawn skeleton then spawn
+        while (currentSpawnInWave < maxSpawnInWave)
+        {
+            //show fvx spawn point
+            spawnPoint.GetComponent<Spawn>().ShowSpawnVFX();
+            SpawnSkeleton(spawnPoint.transform.position);
+            yield return new WaitForSeconds(2.0f);
+        }
+    }
+
+    private void SpawnSkeleton(Vector3 spawnPosition)
+    {
+        GameObject skeleton = enemiesPool.Count != 0 ? GetSkeleton() : CreateSkeleton();
+        skeleton.transform.position = spawnPosition;
+        currentSpawnInWave++;
+    }
+
+    private GameObject CreateSkeleton()
+    {
+        Debug.Log("CreateSkeleton");
+        GameObject skeleton = Instantiate(skeletonPrefab, enemiesFolder);
+        skeleton.name = "Skeleeton_" + enemyPoolCounter;
+        ActivateBillboardsEffectInChilder(skeleton);
+        enemyPoolCounter++;
+
+        return skeleton;
+    }
+
+    private GameObject GetSkeleton()
+    {
+        Debug.Log("GetSkeleton");
+        GameObject skeleton     = enemiesPool.Dequeue();
+        skeleton.SetActive(true);
+        Character skeletonChar  = skeleton.GetComponent<Character>();
+        skeletonChar.IsPause    = false;
+        skeletonChar.IsDead     = false;
+        return skeleton;
+    }
+
+    public void OnEnemieDie(GameObject enemieDestoryObject)
+    {
+        enemieDestoryObject.SetActive(false);
+        enemieDestoryObject.transform.position = Vector3.zero;
+        enemiesPool.Enqueue(enemieDestoryObject);
+    }
 
     public void CreateDeathBody(Sprite deathSprite, Vector3 diePos, float xScale)
     {
@@ -109,6 +181,16 @@ public class SceneController : MonoBehaviour
     }
 
 
+    private void ActivateBillboardsEffectInChilder(GameObject gameObject)
+    {
+        foreach (Transform child in gameObject.transform)
+        {
+            if (child.tag == "Billboard")
+            {
+                child.gameObject.AddComponent<Billboards>();
+            }
+        }
+    }
 
     private void ActivateBillboardsEffect()
     {

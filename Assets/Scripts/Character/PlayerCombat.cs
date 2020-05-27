@@ -55,6 +55,13 @@ public class PlayerCombat : CharacterCombat
         characterAnimator.SetTrigger("Die");
     }
 
+    public override void TakeDamage(int damageTake)
+    {
+        characterAnimationEvents.ShowHitAnim();
+        health -= damageTake;
+        if (health <= 0)
+            Die();
+    }
     protected override void AfterDeath()
     {
         gameObject.GetComponent<PlayerCombat>().enabled = false;
@@ -62,7 +69,6 @@ public class PlayerCombat : CharacterCombat
 
     public override void Attack()
     {
-        Debug.Log("Attack!");
         StartCoroutine(DoDamage());
     }
 
