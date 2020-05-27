@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1814880737158681230}
   m_Layer: 0
   m_Name: HealthPotion
-  m_TagString: Billboard
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 1814880737953276524}
   m_Layer: 0
   m_Name: HealthPotionSprite
-  m_TagString: Untagged
+  m_TagString: Billboard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

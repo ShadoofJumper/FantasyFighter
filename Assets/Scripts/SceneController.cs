@@ -36,7 +36,10 @@ public class SceneController : MonoBehaviour
     [SerializeField] private int enemyIncreaseStep;
     [SerializeField] private List<Transform> enemySpawnPoints;
     [SerializeField] private Transform enemiesFolder;
-    private Queue<GameObject> enemiesPool = new Queue<GameObject>();
+    [SerializeField] private Transform potionFolder;
+    private Queue<GameObject> enemiesPool   = new Queue<GameObject>();
+    private Queue<GameObject> potionPool    = new Queue<GameObject>();
+    private int potionPoolCounter;
     private int enemyPoolCounter;
     private int currentSpawnInWave;
     private int waveNumber;
@@ -65,6 +68,7 @@ public class SceneController : MonoBehaviour
     }
 
     // -------------------- Spawn logic ---------------------
+    //To DO pool objects code repeated 
     private void StartSpawnManager()
     {
         // max enemies to spawn in current wave
@@ -73,11 +77,11 @@ public class SceneController : MonoBehaviour
         foreach (Transform spawnPoint in enemySpawnPoints)
         {
             // start coroutine where enemies randomly spawn while need
-            StartCoroutine(SpawnOnPoint(spawnPoint));
+            StartCoroutine(SpawnEnemyOnPoint(spawnPoint));
         }
     }
 
-    IEnumerator SpawnOnPoint(Transform spawnPoint)
+    IEnumerator SpawnEnemyOnPoint(Transform spawnPoint)
     {
         // if need spawn skeleton then spawn
         while (currentSpawnInWave < maxSpawnInWave)
@@ -98,7 +102,6 @@ public class SceneController : MonoBehaviour
 
     private GameObject CreateSkeleton()
     {
-        Debug.Log("CreateSkeleton");
         GameObject skeleton = Instantiate(skeletonPrefab, enemiesFolder);
         skeleton.name = "Skeleeton_" + enemyPoolCounter;
         ActivateBillboardsEffectInChilder(skeleton);
@@ -109,7 +112,6 @@ public class SceneController : MonoBehaviour
 
     private GameObject GetSkeleton()
     {
-        Debug.Log("GetSkeleton");
         GameObject skeleton     = enemiesPool.Dequeue();
         skeleton.SetActive(true);
         Character skeletonChar  = skeleton.GetComponent<Character>();
@@ -117,6 +119,33 @@ public class SceneController : MonoBehaviour
         skeletonChar.IsDead     = false;
         return skeleton;
     }
+
+
+    public GameObject SpawnPotion(Transform spawnPlace)
+    {
+        GameObject potion = potionPool.Count != 0 ? GetPotion() : CreatePotion();
+        potion.GetComponent<HealthPotion>().SpawnPlace = spawnPlace;
+        potion.transform.position = spawnPlace.position;
+        return potion;
+    }
+
+    private GameObject CreatePotion()
+    {
+        GameObject potion = Instantiate(potionPrefab, potionFolder);
+        potion.name = "Potion_" + enemyPoolCounter;
+        ActivateBillboardsEffectInChilder(potion);
+        potionPoolCounter++;
+
+        return potion;
+    }
+
+    private GameObject GetPotion()
+    {
+        GameObject potion = potionPool.Dequeue();
+        potion.SetActive(true);
+        return potion;
+    }
+
 
     public void OnEnemieDie(GameObject enemieDestoryObject)
     {
