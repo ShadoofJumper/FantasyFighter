@@ -12,6 +12,12 @@ public class EnemyCombat : CharacterCombat
         SetUpCombatComp();
     }
 
+    public void SetSkeletornParams(int health, int damage)
+    {
+        this.health = health;
+        this.damage = damage;
+    }
+
     protected override void SetUpCombatComp()
     {
         base.SetUpCombatComp();
@@ -32,6 +38,14 @@ public class EnemyCombat : CharacterCombat
         base.TakeDamage(damageTake);
     }
 
+    public override void Die()
+    {
+        base.Die();
+        //update score
+        ScoreManager.instance.IncreaseEnemyKilled();
+        WaveGameManager.instance.DeincrementSkeletonInWave();
+    }
+
     protected override void AfterDeath()
     {
         SceneController.instance.CreateDeathBody(character.DeathSprite, character.CharacterSpriteObject.transform.position, gameObject.transform.localScale.x);
@@ -46,7 +60,10 @@ public class EnemyCombat : CharacterCombat
     IEnumerator DoDamage()
     {
         yield return new WaitForSeconds(attackDelay);
-        playerCombat.TakeDamage(damage);
+        if (!character.IsDead)
+        {
+            playerCombat.TakeDamage(damage);
+        }
     }
 
 }

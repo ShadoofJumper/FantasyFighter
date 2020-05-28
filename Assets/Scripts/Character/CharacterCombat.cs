@@ -29,6 +29,7 @@ public class CharacterCombat : MonoBehaviour
 
     }
 
+
     public virtual void HealthCharacter(int healthAmound)
     {
         health += healthAmound;

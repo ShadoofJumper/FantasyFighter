@@ -23,9 +23,33 @@ public class WaveGameManager : MonoBehaviour
     }
     #endregion
 
-    public int countDounStart = 5;
-    private int currentWaveLevel = 1;
+    public int countDounStart       = 3;
+    public int countDounBetweenWave = 5;
+    private int currentWaveLevel    = 1;
+    private int countWaveToIncreasHP;
+    private int countWaveToIncreasDD;
+    private int skeletonInWave;
+    private int currentSkeletonInWave;
+    private int currentSkeletonHealth;
+    private int currentSkeletonDamage;
+
     private UIController ui;
+
+    [SerializeField] private int startEnemyCount;
+    [SerializeField] private int enemyIncreaseStep;
+
+    [SerializeField] private int startEnemyDamage;
+    [SerializeField] private int startEnemyHealth;
+
+    public int CurrentWaveLevel => currentWaveLevel;
+    public int SkeletonInWave => skeletonInWave;
+    public int CurrentSkeletonInWave => currentSkeletonInWave;
+
+    private void Start()
+    {
+        currentSkeletonDamage = startEnemyDamage;
+        currentSkeletonHealth = startEnemyHealth;
+    }
 
     public void StartGame()
     {
@@ -44,20 +68,61 @@ public class WaveGameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         ui.SetWarningText("GO!");
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         ui.SetWarningText("");
         StartWave(currentWaveLevel);
     }
 
     private void StartWave(int waveLevel)
     {
-        Debug.Log("StartWave!");
-        SceneController.instance.StartSpawnManager();
+        skeletonInWave          = startEnemyCount + enemyIncreaseStep * (currentWaveLevel - 1);
+        currentSkeletonInWave = skeletonInWave;
+        SetUpWaveDifficulty();
+        SceneController.instance.StartSpawnManager(currentSkeletonInWave, currentSkeletonHealth, currentSkeletonDamage);
+        UIController.instance.UpdateWaveNumber(currentWaveLevel);
+        UIController.instance.UpdateWaveLeft(currentSkeletonInWave);
+    }
+
+    private void SetUpWaveDifficulty()
+    {
+        //if (countWaveToIncreasDD == 3)
+        //{
+        //    currentSkeletonDamage++;
+        //    countWaveToIncreasDD = 0;
+        //}
+        //countWaveToIncreasDD++;
+
+        if (countWaveToIncreasHP == 2)
+        {
+            currentSkeletonHealth++;
+            countWaveToIncreasHP = 0;
+        }
+        // set up wave difficulty
+        countWaveToIncreasHP++;
     }
 
     public void CompleteWave()
     {
         currentWaveLevel++;
+        StartCoroutine(ShowWinWave());
+    }
+
+    IEnumerator ShowWinWave()
+    {
+        ui = UIController.instance;
+        ui.SetWarningText("COMPLETE WAVE!");
+        yield return new WaitForSeconds(2);
+        //show gui text
+        for (int i = 0; i < countDounBetweenWave; i++)
+        {
+            string text = $"WAVE {currentWaveLevel} IN: {(countDounBetweenWave - i)}";
+            ui.SetWarningText(text);
+            yield return new WaitForSeconds(1);
+        }
+        ui.SetWarningText("GO!");
+        yield return new WaitForSeconds(1);
+        ui.SetWarningText("");
+        StartWave(currentWaveLevel);
     }
 
     public void FailWave()
@@ -76,5 +141,13 @@ public class WaveGameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("Score", ScoreManager.instance.EnemiesKilled);
         }
+    }
+
+    public void DeincrementSkeletonInWave()
+    {
+        currentSkeletonInWave--;
+        UIController.instance.UpdateWaveLeft(currentSkeletonInWave);
+        if (currentSkeletonInWave == 0)
+            CompleteWave();
     }
 }

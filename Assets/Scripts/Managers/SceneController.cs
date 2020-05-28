@@ -32,8 +32,7 @@ public class SceneController : MonoBehaviour
     [SerializeField] private GameObject potionPrefab;
     
     //info for spawn manager
-    [SerializeField] private int startEnemyCount;
-    [SerializeField] private int enemyIncreaseStep;
+
     [SerializeField] private List<Transform> enemySpawnPoints;
     [SerializeField] private Transform enemiesFolder;
     [SerializeField] private Transform potionFolder;
@@ -42,9 +41,8 @@ public class SceneController : MonoBehaviour
     private int potionPoolCounter;
     private int enemyPoolCounter;
     private int currentSpawnInWave;
-    private int waveNumber;
     private int maxSpawnInWave;
-
+    private List<Coroutine> waveCoroutin = new List<Coroutine>();
 
     private float rotateStep    = 90;
     private float rotateTime    = 0.5f;
@@ -72,34 +70,47 @@ public class SceneController : MonoBehaviour
 
     // -------------------- Spawn logic ---------------------
     //To DO pool objects code repeated 
-    public void StartSpawnManager()
+    public void StartSpawnManager(int countEnemySpawn, int skeletonHP, int skeletonAttack)
     {
+        ResetSpawnSkeleton();
         // max enemies to spawn in current wave
-        maxSpawnInWave = startEnemyCount + enemyIncreaseStep * waveNumber;
-
+        maxSpawnInWave = countEnemySpawn;
         foreach (Transform spawnPoint in enemySpawnPoints)
         {
             // start coroutine where enemies randomly spawn while need
-            StartCoroutine(SpawnEnemyOnPoint(spawnPoint));
+            Coroutine waveSpawner = StartCoroutine(SpawnEnemyOnPoint(spawnPoint, skeletonHP, skeletonAttack));
+            waveCoroutin.Add(waveSpawner);
         }
     }
 
-    IEnumerator SpawnEnemyOnPoint(Transform spawnPoint)
+    public void ResetSpawnSkeleton()
+    {
+
+        // reset all coroutins
+        foreach (Coroutine waveSpawner in waveCoroutin)
+        {
+            StopCoroutine(waveSpawner);
+        }
+        currentSpawnInWave = 0;
+    }
+
+    IEnumerator SpawnEnemyOnPoint(Transform spawnPoint, int skeletonHP, int skeletonAttack)
     {
         // if need spawn skeleton then spawn
         while (currentSpawnInWave < maxSpawnInWave)
         {
             //show fvx spawn point
             spawnPoint.GetComponent<Spawn>().ShowSpawnVFX();
-            SpawnSkeleton(spawnPoint.transform.position);
+            SpawnSkeleton(spawnPoint.transform.position, skeletonHP, skeletonAttack);
             yield return new WaitForSeconds(2.0f);
         }
     }
 
-    private void SpawnSkeleton(Vector3 spawnPosition)
+    private void SpawnSkeleton(Vector3 spawnPosition, int skeletonHP, int skeletonAttack)
     {
         GameObject skeleton = enemiesPool.Count != 0 ? GetSkeleton() : CreateSkeleton();
         skeleton.transform.position = spawnPosition;
+        skeleton.GetComponent<EnemyCombat>().SetSkeletornParams(skeletonHP, skeletonAttack);
         currentSpawnInWave++;
     }
 
@@ -155,8 +166,6 @@ public class SceneController : MonoBehaviour
         enemieDestoryObject.SetActive(false);
         enemieDestoryObject.transform.position = Vector3.zero;
         enemiesPool.Enqueue(enemieDestoryObject);
-        //update score
-        ScoreManager.instance.IncreaseEnemyKilled();
     }
 
     public void CreateDeathBody(Sprite deathSprite, Vector3 diePos, float xScale)

@@ -34,6 +34,9 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject failPanel;
     [SerializeField] private SceneFader sceneFader;
 
+    [SerializeField] private Text waveNumberText;
+    [SerializeField] private Text waveEnemiesLeft;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +74,15 @@ public class UIController : MonoBehaviour
         enemyKillText.text = scoreNumber.ToString();
     }
 
+    public void UpdateWaveNumber(int number)
+    {
+        waveNumberText.text = "WAVE: "+ number;
+    }
+
+    public void UpdateWaveLeft(int number)
+    {
+        waveEnemiesLeft.text = number + " left";
+    }
 
     public void SetWarningText(string warningString)
     {
