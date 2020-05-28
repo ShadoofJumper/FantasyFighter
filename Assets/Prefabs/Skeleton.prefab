@@ -199,6 +199,9 @@ MonoBehaviour:
     type: 3}
   characterSpriteObject: {fileID: 1146800411626968645}
   attackRange: 0.6
+  posToGo:
+  - {fileID: 3430499932483053054, guid: 6a4b6c582b6dc234899b89613c70a6a4, type: 3}
+  - {fileID: 5300476746573076261, guid: 16d24356b960697438132fee7b313caf, type: 3}
 --- !u!54 &1146800411659794680
 Rigidbody:
   m_ObjectHideFlags: 0

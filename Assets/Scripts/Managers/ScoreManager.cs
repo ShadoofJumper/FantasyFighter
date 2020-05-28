@@ -23,6 +23,7 @@ public class ScoreManager : MonoBehaviour
     #endregion
 
     private int enemiesKilled;
+    public int EnemiesKilled => enemiesKilled;
 
     // Start is called before the first frame update
     void Start()

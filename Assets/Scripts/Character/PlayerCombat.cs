@@ -55,16 +55,24 @@ public class PlayerCombat : CharacterCombat
         characterAnimator.SetTrigger("Die");
     }
 
+    public override void HealthCharacter(int healthAmound)
+    {
+        base.HealthCharacter(healthAmound);
+        UIController.instance.UpdateHPBar(health);
+    }
+
     public override void TakeDamage(int damageTake)
     {
         characterAnimationEvents.ShowHitAnim();
         health -= damageTake;
+        UIController.instance.UpdateHPBar(health);
         if (health <= 0)
             Die();
     }
     protected override void AfterDeath()
     {
         gameObject.GetComponent<PlayerCombat>().enabled = false;
+        WaveGameManager.instance.FailWave();
     }
 
     public override void Attack()

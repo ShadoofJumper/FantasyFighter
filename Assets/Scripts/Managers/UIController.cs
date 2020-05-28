@@ -26,10 +26,13 @@ public class UIController : MonoBehaviour
     [SerializeField] private Text enemyKillText;
     [SerializeField] private Image[] hearts;
 
-    [SerializeField] private Image emptyHearth;
-    [SerializeField] private Image fullHearth;
-    [SerializeField] private Image halfHearth;
+    [SerializeField] private Sprite emptyHearth;
+    [SerializeField] private Sprite fullHearth;
+    [SerializeField] private Sprite halfHearth;
 
+    [SerializeField] private Text warningText;
+    [SerializeField] private GameObject failPanel;
+    [SerializeField] private SceneFader sceneFader;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +43,27 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    // -------- UI info  game --------
+
+    public void UpdateHPBar(int currentHp)
+    {
+        for (int hearthId = 1; hearthId <= hearts.Length; hearthId++)
+        {
+            if ((hearthId * 2) <= currentHp)
+            {
+                hearts[hearthId - 1].sprite = fullHearth;
+            }
+            else if ((hearthId * 2) - 1 == currentHp)
+            {
+                hearts[hearthId - 1].sprite = halfHearth;
+            }
+            else
+            {
+                hearts[hearthId - 1].sprite = emptyHearth;
+            }
+        }
     }
 
     public void UpdateScore(int scoreNumber)
@@ -48,5 +71,32 @@ public class UIController : MonoBehaviour
         enemyKillText.text = scoreNumber.ToString();
     }
 
+
+    public void SetWarningText(string warningString)
+    {
+        warningText.text = warningString;
+    }
+
+    // -------- fail game --------
+    public void ShowFailPanel()
+    {
+        failPanel.SetActive(true);
+    }
+    public void HideFailPanel()
+    {
+        failPanel.SetActive(false);
+    }
+
+    public void RestartGame()
+    {
+        HideFailPanel();
+        sceneFader.FadeTo("Game");
+    }
+
+    public void ReturnMenu()
+    {
+        HideFailPanel();
+        sceneFader.FadeTo("MainMenu");
+    }
 
 }

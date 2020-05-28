@@ -11,7 +11,8 @@ public class Enemy : Character
     private bool isNearPlayer;
     private bool isAttack = false;
     private Transform target;
-
+    private Transform randPlaceToGo;
+    [SerializeField] private List<Transform> posToGo;
 
     private void Awake()
     {
@@ -35,7 +36,14 @@ public class Enemy : Character
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isDead || IsPause || !SceneController.instance.IsGameProgress)
+        if (!SceneController.instance.IsGameProgress)
+        {
+            MoveToRandomPlace();
+            MoveTo(target.position);
+            return;
+        }
+
+        if (isDead || IsPause)
         {
             agent.isStopped = true;
             agent.ResetPath();
@@ -45,7 +53,7 @@ public class Enemy : Character
         // move character to player
         if (!IsNearTarget())
         {
-            MoveToTarget();
+            MoveTo(target.position);
         }
         else
         {
@@ -70,9 +78,18 @@ public class Enemy : Character
         return distance <= attackRange;
     }
 
-    private void MoveToTarget()
+    private void MoveTo(Vector3 pos)
     {
-        agent.SetDestination(target.position);
+        agent.SetDestination(pos);
+    }
+
+    private void MoveToRandomPlace()
+    {
+        if (randPlaceToGo == null)
+        {
+            randPlaceToGo = posToGo[Random.Range(0, posToGo.Count)];
+            target = randPlaceToGo;
+        }
     }
 
     // ------------- Animation logic --------------

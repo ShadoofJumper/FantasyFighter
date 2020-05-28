@@ -9,10 +9,17 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private Slider slider;
     [SerializeField] private SceneFader sceneFader;
+    [SerializeField] private Text scoreText;
+
     private string sceneOnPlayName = "Game";
-    private float volumePower;
+    static private float volumePower;
 
     public float VolumePower => volumePower;
+
+    private void Start()
+    {
+        UpdateScore();
+    }
 
     // ------------- main menu
     public void StartGame()
@@ -42,5 +49,10 @@ public class MainMenuManager : MonoBehaviour
     {
         volumePower = slider.value;
         Debug.Log("Volume power: "+ volumePower);
+    }
+
+    public void UpdateScore()
+    {
+        scoreText.text = "Score: "+PlayerPrefs.GetInt("Score", 0).ToString();
     }
 }

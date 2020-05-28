@@ -54,7 +54,7 @@ public class SceneController : MonoBehaviour
     private List<GameObject> deathBodys = new List<GameObject>();
 
     public GameObject Player    => player;
-    public bool IsGameProgress  => isGameProgress;
+    public bool IsGameProgress { set { isGameProgress = value; } get { return isGameProgress; } }
 
 
     void Start()
@@ -65,13 +65,14 @@ public class SceneController : MonoBehaviour
 
     private void Update()
     {
-        RotateWorld();
+        if(SceneController.instance.IsGameProgress)
+            RotateWorld();
         //Debug.Log($"Enemy coun: {currentSpawnInWave}/{startEnemyCount}");
     }
 
     // -------------------- Spawn logic ---------------------
     //To DO pool objects code repeated 
-    private void StartSpawnManager()
+    public void StartSpawnManager()
     {
         // max enemies to spawn in current wave
         maxSpawnInWave = startEnemyCount + enemyIncreaseStep * waveNumber;
