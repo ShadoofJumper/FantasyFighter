@@ -46,19 +46,21 @@ public class SceneController : MonoBehaviour
     private int maxSpawnInWave;
 
 
+    private float rotateStep    = 90;
+    private float rotateTime    = 0.5f;
+    private bool isRotate       = false;
+    private bool isGameProgress = false;
     private GameObject[] billboardSprites;
-    private float rotateStep = 90;
-    private float rotateTime = 0.5f;
-    private bool isRotate   = false;
     private List<GameObject> deathBodys = new List<GameObject>();
 
-    public GameObject Player => player;
+    public GameObject Player    => player;
+    public bool IsGameProgress  => isGameProgress;
 
 
     void Start()
     {
         ActivateBillboardsEffect();
-        StartSpawnManager();
+        //StartSpawnManager();
     }
 
     private void Update()
@@ -152,6 +154,8 @@ public class SceneController : MonoBehaviour
         enemieDestoryObject.SetActive(false);
         enemieDestoryObject.transform.position = Vector3.zero;
         enemiesPool.Enqueue(enemieDestoryObject);
+        //update score
+        ScoreManager.instance.IncreaseEnemyKilled();
     }
 
     public void CreateDeathBody(Sprite deathSprite, Vector3 diePos, float xScale)

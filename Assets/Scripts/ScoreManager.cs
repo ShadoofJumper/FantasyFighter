@@ -40,5 +40,6 @@ public class ScoreManager : MonoBehaviour
     public void IncreaseEnemyKilled()
     {
         enemiesKilled++;
+        UIController.instance.UpdateScore(enemiesKilled);
     }
 }

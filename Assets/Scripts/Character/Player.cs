@@ -5,8 +5,8 @@ using UnityEngine;
 public class Player : Character
 {
     private Vector3 moveVelocity;
-    private bool    isAttack;
-    private bool    isMove;
+    private bool isAttack;
+    private bool isMove;
     private Vector3 rawMoveInput;
 
     public bool IsAttack => isAttack;
@@ -21,7 +21,7 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        if (isDead)
+        if (isDead || !SceneController.instance.IsGameProgress)
         {
             moveVelocity = Vector3.zero;
             //call last time for stop
@@ -37,8 +37,10 @@ public class Player : Character
 
     private void FixedUpdate()
     {
-        if (isDead)
+        if (isDead || !SceneController.instance.IsGameProgress)
+        {
             return;
+        }
 
         MovePlayer();
     }

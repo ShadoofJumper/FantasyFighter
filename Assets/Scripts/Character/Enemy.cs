@@ -35,7 +35,7 @@ public class Enemy : Character
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isDead || IsPause)
+        if (isDead || IsPause || !SceneController.instance.IsGameProgress)
         {
             agent.isStopped = true;
             agent.ResetPath();
