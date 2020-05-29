@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6001632217985711176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6001632217985711177}
+  - component: {fileID: 6001632217985711178}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6001632217985711177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6001632217985711176}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6001632217985711178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6001632217985711176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 134b62b2b310abf46aefed37e63ca4f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleMusic: Theme
+  menuMusic: MenuMusic
+  sounds:
+  - name: PlayerDeath
+    clip: {fileID: 8300000, guid: 705d281f561a89b4b8ab20421be74d87, type: 3}
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: SwordSwing
+    clip: {fileID: 8300000, guid: 571b885631606c343ad56cbc3cd79f7e, type: 3}
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: Theme
+    clip: {fileID: 8300000, guid: b37cb4e3161bdca4fbfe757f6ae9d93d, type: 3}
+    volume: 0.05
+    pitch: 1
+    loop: 1
+    isMusic: 1
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: PickupHealth
+    clip: {fileID: 8300000, guid: 39f17a949f32fa64084de2046e46dc17, type: 3}
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: Hit
+    clip: {fileID: 8300000, guid: 0203c2ff82518fd4d88b6fd9e1862c9d, type: 3}
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: MenuMusic
+    clip: {fileID: 8300000, guid: b194eded4dd6dd14ca6a876e43c682bd, type: 3}
+    volume: 0.05
+    pitch: 1
+    loop: 1
+    isMusic: 1
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: MoveGrass
+    clip: {fileID: 8300000, guid: 83d0aa6bba09edd47a2e40f4cadd199b, type: 3}
+    volume: 0.02
+    pitch: 0.74
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 1
+    source: {fileID: 0}
+  - name: GetHit
+    clip: {fileID: 8300000, guid: c6e81bdf97b212d4dae7574dd180686b, type: 3}
+    volume: 0.2
+    pitch: 0.74
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: SkeletonDie
+    clip: {fileID: 8300000, guid: 18c2f0422868fd64e8206fd98feb8e90, type: 3}
+    volume: 0.2
+    pitch: 0.74
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: CompleteWave
+    clip: {fileID: 8300000, guid: 2afd72e2cb0affc4a989e37548a59076, type: 3}
+    volume: 0.2
+    pitch: 0.74
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: Error
+    clip: {fileID: 8300000, guid: f39135ec57cfbe54799aa14d91c5b9f2, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: ErrorGo
+    clip: {fileID: 8300000, guid: 0cbc56b9b42c51c4393aac9a927ee2b4, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: ButtonOver
+    clip: {fileID: 8300000, guid: 5dd2ec6d59478f74c9c9f52380ccb5a7, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}
+  - name: ButtonPress
+    clip: {fileID: 8300000, guid: 4d2fbc266a90f4c40add87797cbf22f3, type: 3}
+    volume: 0.4
+    pitch: 1
+    loop: 0
+    isMusic: 0
+    isDelayNeed: 0
+    source: {fileID: 0}

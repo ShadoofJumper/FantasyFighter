@@ -7,28 +7,45 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject menuPanel;
-    [SerializeField] private Slider slider;
+    [SerializeField] private Slider sliderVolume;
+    [SerializeField] private Slider sliderFXVolume;
     [SerializeField] private SceneFader sceneFader;
     [SerializeField] private Text scoreText;
 
     private string sceneOnPlayName = "Game";
-    static private float volumePower;
 
-    public float VolumePower => volumePower;
+    static private float volumePower;
+    static private float volumeFXPower;
+
+    public float VolumePower    => volumePower;
+    public float VolumeFXPower  => volumeFXPower;
 
     private void Start()
     {
         UpdateScore();
+        LoadSetttings();
+        SoundManager.instance.PlayMenuMusic();
+    }
+
+    private void LoadSetttings()
+    {
+        volumePower     = PlayerPrefs.GetFloat("VolumeMusic", 1);
+        volumeFXPower   = PlayerPrefs.GetFloat("VolumeFX", 1);
+        sliderVolume.value      = volumePower;
+        sliderFXVolume.value    = volumeFXPower;
     }
 
     // ------------- main menu
     public void StartGame()
     {
+        SoundManager.instance.Play("ButtonPress");
+        
         sceneFader.FadeTo(sceneOnPlayName);
     }
 
     public void TurnSettings()
     {
+        SoundManager.instance.Play("ButtonPress");
         menuPanel.SetActive(false);
         settingsPanel.SetActive(true);
     }
@@ -41,14 +58,24 @@ public class MainMenuManager : MonoBehaviour
     // ------------- settings
     public void BackToMenu()
     {
+        SoundManager.instance.Play("ButtonPress");
         menuPanel.SetActive(true);
         settingsPanel.SetActive(false);
+
+        PlayerPrefs.SetFloat("VolumeMusic", volumePower);
+        PlayerPrefs.SetFloat("VolumeFX", volumeFXPower);
     }
 
-    public void SliderChange()
+    public void SliderVolumeChange()
     {
-        volumePower = slider.value;
-        Debug.Log("Volume power: "+ volumePower);
+        volumePower = sliderVolume.value;
+        SoundManager.instance.SetAllMusicVolume(volumePower);
+    }
+    public void SliderVolumeVFXChange()
+    {
+        volumeFXPower = sliderFXVolume.value;
+        SoundManager.instance.SetAllFXVolume(volumeFXPower);
+        SoundManager.instance.Play("Hit");
     }
 
     public void UpdateScore()

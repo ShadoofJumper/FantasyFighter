@@ -13,8 +13,10 @@ public class CharacterCombat : MonoBehaviour
     protected AnimationEvents characterAnimationEvents;
     protected Animator characterAnimator;
     protected Character character;
+    private int maxHealth;
 
 
+    public int MaxHealth => maxHealth;
     public int Health => health;
     public int Damage => damage;
 
@@ -26,7 +28,7 @@ public class CharacterCombat : MonoBehaviour
 
         characterAnimationEvents.onDie = AfterDeath;
         characterAnimationEvents.onHit = AfterHit;
-
+        maxHealth = health;
     }
 
 

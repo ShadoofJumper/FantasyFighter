@@ -23,6 +23,7 @@ public class UIMainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        SoundManager.instance.Play("ButtonOver");
         // change size to 
         button.localScale = sizeOnHover * sizeStandart * Vector3.one;
     }

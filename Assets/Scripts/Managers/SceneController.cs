@@ -85,24 +85,25 @@ public class SceneController : MonoBehaviour
 
     public void ResetSpawnSkeleton()
     {
-
         // reset all coroutins
         foreach (Coroutine waveSpawner in waveCoroutin)
         {
-            StopCoroutine(waveSpawner);
+            if (waveSpawner != null)
+                StopCoroutine(waveSpawner);
         }
         currentSpawnInWave = 0;
     }
 
     IEnumerator SpawnEnemyOnPoint(Transform spawnPoint, int skeletonHP, int skeletonAttack)
     {
+        yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
         // if need spawn skeleton then spawn
         while (currentSpawnInWave < maxSpawnInWave)
         {
             //show fvx spawn point
             spawnPoint.GetComponent<Spawn>().ShowSpawnVFX();
             SpawnSkeleton(spawnPoint.transform.position, skeletonHP, skeletonAttack);
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(Random.Range(2.0f, 2.5f));
         }
     }
 
@@ -128,9 +129,11 @@ public class SceneController : MonoBehaviour
     {
         GameObject skeleton     = enemiesPool.Dequeue();
         skeleton.SetActive(true);
-        Character skeletonChar  = skeleton.GetComponent<Character>();
+        Character skeletonChar      = skeleton.GetComponent<Character>();
+        AudioSource skeletonAudio   = skeleton.GetComponent<AudioSource>();
         skeletonChar.IsPause    = false;
         skeletonChar.IsDead     = false;
+        skeletonAudio.Play();
         return skeleton;
     }
 

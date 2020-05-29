@@ -10,6 +10,7 @@ public class HealthPotion : MonoBehaviour
     private Transform spawnPlace;
     public Transform SpawnPlace { get { return spawnPlace; } set { spawnPlace = value; } }
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +21,7 @@ public class HealthPotion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         characterCombat = other.GetComponent<CharacterCombat>();
-        if (characterCombat != null)
+        if (characterCombat != null && characterCombat.Health < characterCombat.MaxHealth)
         {
             Use();
         }
@@ -31,7 +32,7 @@ public class HealthPotion : MonoBehaviour
         if (spawnPlace)
             spawnPlace.GetComponent<SpawnPotion>().SpawnWithDelay();
         spawnPlace = null;
-
+        SoundManager.instance.Play("PickupHealth");
         characterCombat.HealthCharacter(healthAmound);
         gameObject.SetActive(false);
     }

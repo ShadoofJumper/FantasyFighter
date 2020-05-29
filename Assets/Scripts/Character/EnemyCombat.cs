@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class EnemyCombat : CharacterCombat
 {
     private CharacterCombat playerCombat;
+    private AudioSource enemyAudio;
 
     private void Start()
     {
@@ -21,7 +22,8 @@ public class EnemyCombat : CharacterCombat
     protected override void SetUpCombatComp()
     {
         base.SetUpCombatComp();
-        playerCombat = SceneController.instance.Player.GetComponent<CharacterCombat>();
+        playerCombat    = SceneController.instance.Player.GetComponent<CharacterCombat>();
+        enemyAudio      = GetComponent<AudioSource>();
     }
 
     public override void Fight(UnityAction delayFunk = null)
@@ -34,6 +36,7 @@ public class EnemyCombat : CharacterCombat
 
     public override void TakeDamage(int damageTake)
     {
+        SoundManager.instance.Play("Hit");
         character.IsPause = true;
         base.TakeDamage(damageTake);
     }
@@ -42,8 +45,11 @@ public class EnemyCombat : CharacterCombat
     {
         base.Die();
         //update score
-        ScoreManager.instance.IncreaseEnemyKilled();
         WaveGameManager.instance.DeincrementSkeletonInWave();
+        //sound
+        SoundManager.instance.Play("SkeletonDie");
+        ScoreManager.instance.IncreaseEnemyKilled();
+        enemyAudio.Stop();
     }
 
     protected override void AfterDeath()

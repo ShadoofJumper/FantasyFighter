@@ -41,6 +41,8 @@ public class PlayerCombat : CharacterCombat
 
     public override void Die()
     {
+        SoundManager.instance.Play("PlayerDeath");
+        SoundManager.instance.StopBattleMusic();
         character.IsDead = true;
         character.CharacterRigidbody.velocity = Vector3.zero;
         StartCoroutine(DieAnimWithDelay());
@@ -63,10 +65,11 @@ public class PlayerCombat : CharacterCombat
 
     public override void TakeDamage(int damageTake)
     {
+        SoundManager.instance.Play("GetHit");
         characterAnimationEvents.ShowHitAnim();
         health -= damageTake;
         UIController.instance.UpdateHPBar(health);
-        if (health <= 0)
+        if (health <= 0 && !character.IsDead)
             Die();
     }
     protected override void AfterDeath()
@@ -77,6 +80,7 @@ public class PlayerCombat : CharacterCombat
 
     public override void Attack()
     {
+        SoundManager.instance.Play("SwordSwing");
         StartCoroutine(DoDamage());
     }
 

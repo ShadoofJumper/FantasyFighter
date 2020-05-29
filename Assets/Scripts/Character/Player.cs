@@ -77,6 +77,9 @@ public class Player : Character
 
     private void MovePlayer()
     {
+        if(moveVelocity.magnitude > 0.1f)
+            SoundManager.instance.Play("MoveGrass");
+
         characterRigidbody.velocity = moveVelocity * moveSpeed;
     }
 

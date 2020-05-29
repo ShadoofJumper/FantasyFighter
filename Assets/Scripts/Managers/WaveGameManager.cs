@@ -60,13 +60,17 @@ public class WaveGameManager : MonoBehaviour
     IEnumerator StartGameWithDelay()
     {
         ui = UIController.instance;
+        yield return new WaitForSeconds(2.0f);
+        SoundManager.instance.StopMenuMusic();
         //show gui text
         for (int i = 0; i < countDounStart; i++)
         {
             string text = (countDounStart - i).ToString();
             ui.SetWarningText(text);
+            SoundManager.instance.Play("Error");
             yield return new WaitForSeconds(1);
         }
+        SoundManager.instance.Play("ErrorGo");
         ui.SetWarningText("GO!");
         yield return new WaitForSeconds(1);
         ui.SetWarningText("");
@@ -75,6 +79,7 @@ public class WaveGameManager : MonoBehaviour
 
     private void StartWave(int waveLevel)
     {
+        SoundManager.instance.PlayBattleMusic();
         skeletonInWave          = startEnemyCount + enemyIncreaseStep * (currentWaveLevel - 1);
         currentSkeletonInWave = skeletonInWave;
         SetUpWaveDifficulty();
@@ -103,6 +108,8 @@ public class WaveGameManager : MonoBehaviour
 
     public void CompleteWave()
     {
+        SoundManager.instance.StopBattleMusic();
+        SoundManager.instance.Play("CompleteWave");
         currentWaveLevel++;
         StartCoroutine(ShowWinWave());
     }
@@ -116,9 +123,11 @@ public class WaveGameManager : MonoBehaviour
         for (int i = 0; i < countDounBetweenWave; i++)
         {
             string text = $"WAVE {currentWaveLevel} IN: {(countDounBetweenWave - i)}";
+            SoundManager.instance.Play("Error");
             ui.SetWarningText(text);
             yield return new WaitForSeconds(1);
         }
+        SoundManager.instance.Play("ErrorGo");
         ui.SetWarningText("GO!");
         yield return new WaitForSeconds(1);
         ui.SetWarningText("");
