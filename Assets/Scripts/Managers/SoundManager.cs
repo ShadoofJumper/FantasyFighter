@@ -56,7 +56,6 @@ public class SoundManager : MonoBehaviour
 
     public void SetAllFXVolume(float volumePower)
     {
-        Debug.Log("SetAllFXVolume: "+ volumePower);
         foreach (Sound s in sounds)
         {
             if (!s.isMusic)
@@ -68,7 +67,6 @@ public class SoundManager : MonoBehaviour
 
     public void SetAllMusicVolume(float volumePower)
     {
-        Debug.Log("SetAllMusicVolume: " + volumePower);
         foreach (Sound s in sounds)
         {
             if (s.isMusic)
@@ -94,7 +92,6 @@ public class SoundManager : MonoBehaviour
         Sound s = GetSound(name);
         if (s != null && CanPlaySound(s))
         {
-            Debug.Log("play: "+ name);
             s.source.Play();
         }
     }

@@ -96,7 +96,6 @@ public class Enemy : Character
     private void UpdateAnimation()
     {
         float actualMoveSpeed = agent.velocity.magnitude;
-        //Debug.Log("UpdateAnimation: " + actualMoveSpeed);
         characterAnimator.SetFloat("MoveSpeed", actualMoveSpeed);
     }
 
@@ -116,7 +115,6 @@ public class Enemy : Character
     // -------------- Combat logic --------------
     private void Attack()
     {
-        //Debug.Log("Attack!");
         isAttack = true;
         characterCombat.Fight();
     }

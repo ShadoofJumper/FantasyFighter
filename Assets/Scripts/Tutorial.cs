@@ -25,7 +25,6 @@ public class Tutorial : MonoBehaviour
 
     private void ShowTutorial()
     {
-        PlayerPrefs.SetInt("TutorialShowed", 1);
         TutorialPanel.SetActive(true);
         TutorialBlockFirst.SetActive(true);
     }
@@ -38,6 +37,7 @@ public class Tutorial : MonoBehaviour
 
     public void CompleteTutorial()
     {
+        PlayerPrefs.SetInt("TutorialShowed", 1);
         TutorialBlockSecond.SetActive(false);
         TutorialPanel.SetActive(false);
         WaveGameManager.instance.StartGame();

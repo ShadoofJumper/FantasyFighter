@@ -145,7 +145,6 @@ public class WaveGameManager : MonoBehaviour
     public void SaveScore()
     {
         int currentMaxScore = PlayerPrefs.GetInt("Score", 0);
-        Debug.Log($"SaveScore: was{currentMaxScore}, have{ScoreManager.instance.EnemiesKilled}");
         if (ScoreManager.instance.EnemiesKilled > currentMaxScore)
         {
             PlayerPrefs.SetInt("Score", ScoreManager.instance.EnemiesKilled);

@@ -94,7 +94,6 @@ public class PlayerCombat : CharacterCombat
         foreach (RaycastHit hit in enemysHit)
         {
             CharacterCombat hitEnemy = hit.collider.gameObject.GetComponent<CharacterCombat>();
-            //Debug.Log($"Helth: {hitEnemy.Health}");
             if (hitEnemy != null)
             {
                 hitEnemy.TakeDamage(damage);

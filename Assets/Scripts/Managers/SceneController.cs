@@ -65,7 +65,6 @@ public class SceneController : MonoBehaviour
     {
         if(SceneController.instance.IsGameProgress)
             RotateWorld();
-        //Debug.Log($"Enemy coun: {currentSpawnInWave}/{startEnemyCount}");
     }
 
     // -------------------- Spawn logic ---------------------
@@ -103,7 +102,7 @@ public class SceneController : MonoBehaviour
             //show fvx spawn point
             spawnPoint.GetComponent<Spawn>().ShowSpawnVFX();
             SpawnSkeleton(spawnPoint.transform.position, skeletonHP, skeletonAttack);
-            yield return new WaitForSeconds(Random.Range(2.0f, 2.5f));
+            yield return new WaitForSeconds(Random.Range(5.0f, 8.5f));
         }
     }
 

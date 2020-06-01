@@ -24,6 +24,7 @@ public class MainMenuManager : MonoBehaviour
     {
         UpdateScore();
         LoadSetttings();
+        SoundManager.instance.StopBattleMusic();
         SoundManager.instance.PlayMenuMusic();
     }
 
@@ -39,8 +40,20 @@ public class MainMenuManager : MonoBehaviour
     public void StartGame()
     {
         SoundManager.instance.Play("ButtonPress");
-        
         sceneFader.FadeTo(sceneOnPlayName);
+    }
+
+    public void ResetGame()
+    {
+        SoundManager.instance.Play("ButtonPress");
+        PlayerPrefs.DeleteAll();
+        volumePower     = 1;
+        volumeFXPower   = 1;
+        sliderVolume.value      = 1;
+        sliderFXVolume.value    = 1;
+        SoundManager.instance.SetAllFXVolume(volumeFXPower);
+        SoundManager.instance.SetAllMusicVolume(volumeFXPower);
+        UpdateScore();
     }
 
     public void TurnSettings()
